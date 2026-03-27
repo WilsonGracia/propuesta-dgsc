@@ -1,10 +1,33 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DatosPersonalesModule } from './datos-personales/datos-personales.module';
+import configuration from './config/configuration';
+import { Genero } from './datos-personales/entities/genero.entity';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [DatosPersonalesModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      load: [configuration],
+    }),
+    TypeOrmModule.forRoot({
+      entities: [Genero],
+      type: 'postgres',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT || '5432', 10),
+      username: process.env.DB_USER,
+      database: process.env.DB_NAME,
+      password: process.env.DB_PASS,
+      synchronize: false,
+      schema: 'public',
+      logging: true,
+    }),
+    DatosPersonalesModule,
+    ConfigModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
