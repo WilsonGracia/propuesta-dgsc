@@ -11,6 +11,8 @@ import { CreateGeneroDto } from './dtos/inputs/create-genero.dto';
 import { CreatePersonaDto } from './dtos/inputs/create-persona.dto';
 import { PersonaMapper } from './mappers/persona.mapper';
 import { PersonaRepository } from './repositories/persona.repository';
+import { handleDbError } from 'src/common/helpers/database-error.helper';
+import { UpsertPersonaDto } from './dtos/inputs/upsert-persona.dto';
 
 @Injectable()
 export class DatosPersonalesService {
@@ -40,21 +42,15 @@ export class DatosPersonalesService {
     try {
       await this.personaRepository.insertar(entity);
     } catch (error) {
-      const code = error?.driverError?.code; //! captura el codigo lanzado DESDE LA BD (ver procedimiento)
-      const msg = error?.driverError?.message ?? error?.message; //! lo mismo con el msg y si no tira el nest
+      handleDbError(error);
+    }
+  }
 
-      switch (
-        code //! dependiendo del codigo lanzado por la BD, se lanza una excepcion diferente
-      ) {
-        case '23505': //! unique_violation
-          throw new ConflictException(msg);
-        case '23514': //! check_violation
-          throw new BadRequestException(msg);
-        case '23503': //! foreign_key_violation
-          throw new BadRequestException(msg);
-        default:
-          throw new InternalServerErrorException(msg);
-      }
+  async upsertPersonaS(dto: UpsertPersonaDto): Promise<void> {
+    try {
+      await this.personaRepository.upsertPersonaR(dto);
+    } catch (error) {
+      handleDbError(error);
     }
   }
 }
