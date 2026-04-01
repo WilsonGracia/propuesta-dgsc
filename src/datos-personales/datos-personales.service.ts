@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Genero } from './entities/genero.entity';
 import { Repository } from 'typeorm';
@@ -13,6 +8,19 @@ import { PersonaMapper } from './mappers/persona.mapper';
 import { PersonaRepository } from './repositories/persona.repository';
 import { handleDbError } from 'src/common/helpers/database-error.helper';
 import { UpsertPersonaDto } from './dtos/inputs/upsert-persona.dto';
+import { GeneroRepository } from './repositories/genero.repository';
+import { ShowGeneroDto } from './dtos/outputs/show-genero.dto';
+import { GeneroMapper } from './mappers/genero.mapper';
+import { UbicacionRepository } from './repositories/ubicacion.repository';
+import { ShowProvinciaDto } from './dtos/outputs/show-provincia.dto';
+import { ProvinciaMapper } from './mappers/provincia.mapper';
+import { Provincia } from './entities/provincia.entity';
+import { ShowDistritoDto } from './dtos/outputs/show-distrito.dto';
+import { DistritoMapper } from './mappers/distrito.mapper';
+import { Distrito } from './entities/distrito.entity';
+import { ShowCantonDto } from './dtos/outputs/show-canton.dto';
+import { CantonMapper } from './mappers/canton.mapper';
+import { Canton } from './entities/canton.entity';
 
 @Injectable()
 export class DatosPersonalesService {
@@ -20,6 +28,8 @@ export class DatosPersonalesService {
     @InjectRepository(Genero)
     private readonly generoRepo: Repository<Genero>,
     private readonly personaRepository: PersonaRepository,
+    private readonly generoRepository: GeneroRepository,
+    private readonly ubicacionRepository: UbicacionRepository,
   ) {}
 
   createGenero(createGeneroDto: CreateGeneroDto): Promise<Genero> {
@@ -53,4 +63,44 @@ export class DatosPersonalesService {
       handleDbError(error);
     }
   }
+
+  async obtenerGeneros(): Promise<ShowGeneroDto[]> {
+    try {
+      const result = await this.generoRepository.obtenerGeneros();
+      return result.map((row) => GeneroMapper.toDto(row as Genero));
+    } catch (error) {
+      handleDbError(error);
+    }
+  }
+
+  //! FUNCIONES PARA TRAER LAS PROVINCIAS, CANTONES Y DISTRITOS
+
+  async obtenerProvinciasS(): Promise<ShowProvinciaDto[]> {
+    try {
+      const result = await this.ubicacionRepository.obtenerProvinciasR();
+      return result.map((row) => ProvinciaMapper.toDto(row as Provincia));
+    } catch (error) {
+      handleDbError(error);
+    }
+  }
+
+  async obtenerDistritosS(c_id: number): Promise<ShowDistritoDto[]> {
+    try {
+      const result = await this.ubicacionRepository.obtenerDistritosR(c_id);
+      return result.map((row) => DistritoMapper.toDto(row as Distrito));
+    } catch (error) {
+      handleDbError(error);
+    }
+  }
+
+  async obtenerCantonesS(p_id: number): Promise<ShowCantonDto[]> {
+    try {
+      const result = await this.ubicacionRepository.obtenerCantonesR(p_id);
+      return result.map((row) => CantonMapper.toDto(row as Canton));
+    } catch (error) {
+      handleDbError(error);
+    }
+  }
+
+  //! FUNCIONES PARA TRAER LAS PROVINCIAS, CANTONES Y DISTRITOS
 }

@@ -1,8 +1,8 @@
-// src/common/helpers/database-error.helper.ts
 import {
   BadRequestException,
   ConflictException,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 
 export function handleDbError(error: any): never {
@@ -15,6 +15,9 @@ export function handleDbError(error: any): never {
     case '23514':
     case '23503':
       throw new BadRequestException(msg);
+    case '42P01':
+      throw new NotFoundException(msg);
+    case '42501':
     default:
       throw new InternalServerErrorException(msg);
   }
