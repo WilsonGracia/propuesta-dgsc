@@ -6,6 +6,7 @@ import { DatosPersonalesModule } from './datos-personales/datos-personales.modul
 import configuration from './config/configuration';
 import { Genero } from './datos-personales/entities/genero.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LoginModule } from './login/login.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
     DatosPersonalesModule,
     ConfigModule,
+    LoginModule,
   ],
   controllers: [AppController],
   providers: [AppService],

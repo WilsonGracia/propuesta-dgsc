@@ -37,17 +37,17 @@ export class DatosPersonalesController {
     return await this.dpService.obtenerProvinciasS();
   }
 
-  @Get('/obtenerDistritos')
-  async obtenerDistritosC(
-    @Query('c_id') c_id: number,
-  ): Promise<ShowDistritoDto[]> {
-    return await this.dpService.obtenerDistritosS(c_id);
-  }
-
   @Get('/obtenerCantones')
   async obtenerCantonesC(
     @Query('p_id') p_id: number,
   ): Promise<ShowCantonDto[]> {
     return await this.dpService.obtenerCantonesS(p_id);
+  }
+
+  @Get('/obtenerDistritos')
+  async obtenerDistritosC(
+    @Query('c_id') c_id: number,
+  ): Promise<ShowDistritoDto[]> {
+    return await this.dpService.obtenerDistritosS(c_id);
   }
 }
