@@ -17,6 +17,22 @@ export class UsuarioRepository {
       entity.email,
     ]);
   }
+
+  async loginUsuarioR(id: string): Promise<Usuario | null> {
+    const result = await this.dataSource.query(
+      'SELECT * FROM fn_login_usuario($1)',
+      [id],
+    );
+
+    const row = result[0] ?? null;
+    if (!row) return null;
+
+    const entity = new Usuario();
+    entity.id = row.uid;
+    entity.pass = row.upass;
+    entity.email = row.uemail;
+    return entity;
+  }
 }
 
 /*

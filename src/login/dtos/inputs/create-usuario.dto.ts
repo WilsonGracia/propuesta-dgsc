@@ -4,7 +4,10 @@ export class CreateUsuarioDto {
   @IsNotEmpty()
   @MaxLength(12, { message: 'La longitud de la cédula supera el limite' })
   @MinLength(8, { message: 'La longitud de la cédula es menor al limite' })
-  id: string;
+  @Matches(/^[0-9]+$/, {
+    message: 'La cédula debe contener solo números',
+  })
+  id!: string;
 
   @IsNotEmpty()
   @MinLength(8, { message: 'La contraseña debe tener al menos 8 caracteres' })
@@ -18,7 +21,7 @@ export class CreateUsuarioDto {
   @Matches(/[!@#$%a^&*()-_+=.,;:"`~']/, {
     message: 'La contraseña debe contener al menos un carácter especial',
   })
-  pass: string;
+  pass!: string;
 
   @IsNotEmpty()
   @MinLength(6, { message: 'El email debe tener al menos 6 caracteres' })
@@ -26,5 +29,5 @@ export class CreateUsuarioDto {
   @Matches(/^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$/, {
     message: 'El email no tiene un formato válido',
   })
-  email: string;
+  email!: string;
 }
