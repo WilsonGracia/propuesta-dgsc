@@ -17,8 +17,4 @@ export class LoginController {
   async loginUsuarioC(@Body() dto: LoginUsuarioDto): Promise<UsuarioDto> {
     return await this.loginService.loginUsuarioS(dto.id, dto.pass);
   }
-
-  /*
-loginUsuarioS(id: string, pass: string): Promise<UsuarioDto> {
-*/
 }

@@ -6,6 +6,8 @@ import { ShowGeneroDto } from './dtos/outputs/show-genero.dto';
 import { Provincia } from './entities/provincia.entity';
 import { ShowDistritoDto } from './dtos/outputs/show-distrito.dto';
 import { ShowCantonDto } from './dtos/outputs/show-canton.dto';
+import { ShowPersonaDatosPersonalesDto } from './dtos/outputs/show-persona-datos.personales.dto';
+import { ShowProvinciaDto } from './dtos/outputs/show-provincia.dto';
 
 @Controller('datos-personales')
 export class DatosPersonalesController {
@@ -49,5 +51,21 @@ export class DatosPersonalesController {
     @Query('c_id') c_id: number,
   ): Promise<ShowDistritoDto[]> {
     return await this.dpService.obtenerDistritosS(c_id);
+  }
+
+  @Post('/obtenerDatosPersonales')
+  async muestraDatosPersonalesUIdC(
+    @Body('id') id: string,
+  ): Promise<ShowPersonaDatosPersonalesDto> {
+    return await this.dpService.muestraDatosPersonalesUIdS(id);
+  }
+
+  @Get('/ubicacion')
+  async obtenerUbicacionDIdC(@Body('id') id: string): Promise<{
+    provincia: ShowProvinciaDto;
+    canton: ShowCantonDto;
+    distrito: ShowDistritoDto;
+  } | null> {
+    return this.dpService.obtenerUbicacionDIdS(id);
   }
 }

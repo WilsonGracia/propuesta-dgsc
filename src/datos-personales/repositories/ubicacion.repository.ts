@@ -27,6 +27,14 @@ export class UbicacionRepository {
     );
   }
 
+  async obtenerUbicacionDId(id: string): Promise<any> {
+    // obtiene pro y can por distrito id sacado de la persona en el front
+    return await this.dataSource.query(
+      'SELECT * FROM fn_mostrar_ubicacion_distrito($1)',
+      [id],
+    );
+  }
+
   /*
   	id INTEGER,
 	nombre VARCHAR(80),

@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { Persona } from '../entities/persona.entity';
 import { UpsertPersonaDto } from '../dtos/inputs/upsert-persona.dto';
+import { response } from 'express';
 
 @Injectable()
 export class PersonaRepository {
@@ -45,5 +46,14 @@ export class PersonaRepository {
         dto.nacionalidad_id,
       ],
     );
+  }
+
+  async muestraDatosPersonalesUIdR(id: string): Promise<any> {
+    const response = await this.dataSource.query(
+      `SELECT * FROM fn_mostrar_datos_personales_uId($1)`,
+      [id],
+    );
+
+    return response;
   }
 }
