@@ -10,6 +10,8 @@ export function handleDbError(error: any): never {
   const msg = error?.driverError?.message ?? error?.message;
 
   switch (code) {
+    case 'P0002':
+      throw new NotFoundException(msg);
     case '23505':
       throw new ConflictException(msg);
     case '23514':

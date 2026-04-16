@@ -28,10 +28,11 @@ export class LoginService {
   async loginUsuarioS(id: string, pass: string): Promise<UsuarioDto> {
     try {
       const response = await this.usuarioRepository.loginUsuarioR(id);
-      if (!response) throw new UnauthorizedException();
+      if (!response)
+        throw new UnauthorizedException('No existe un usuario con ese ID');
 
       const coincide = await bcrypt.compare(pass, response.pass);
-      if (!coincide) throw new UnauthorizedException();
+      if (!coincide) throw new UnauthorizedException('Contraseña incorrecta');
 
       const payload = { sub: response.id };
       const token = await this.jwtService.signAsync(payload);

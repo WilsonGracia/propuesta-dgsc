@@ -7,6 +7,7 @@ import configuration from './config/configuration';
 import { Genero } from './datos-personales/entities/genero.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoginModule } from './login/login.module';
+import { DatosLocalizacionModule } from './datos-localizacion/datos-localizacion.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { LoginModule } from './login/login.module';
     DatosPersonalesModule,
     ConfigModule,
     LoginModule,
+    DatosLocalizacionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

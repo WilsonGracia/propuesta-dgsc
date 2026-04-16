@@ -1,5 +1,6 @@
 import { Persona } from '../entities/persona.entity';
 import { CreatePersonaDto } from '../dtos/inputs/create-persona.dto';
+import { ShowPersonaDatosPersonalesDto } from '../dtos/outputs/show-persona-datos.personales.dto';
 
 export class PersonaMapper {
   static toEntity(dto: CreatePersonaDto): Persona {
@@ -20,6 +21,23 @@ export class PersonaMapper {
 
   static toDto(entity: Persona): CreatePersonaDto {
     const dto = new CreatePersonaDto();
+    dto.nombre = entity.nombre;
+    dto.apellido1 = entity.apellido1;
+    dto.apellido2 = entity.apellido2;
+    dto.nombre_padre = entity.nombre_padre;
+    dto.nombre_madre = entity.nombre_madre;
+    dto.conocido_como = entity.conocido_como;
+    dto.fecha_nacimiento = entity.fecha_nacimiento;
+    dto.usuario_id = entity.usuario_id;
+    dto.genero_id = entity.genero_id;
+    dto.distrito_id = entity.distrito_id;
+    dto.nacionalidad_id = entity.nacionalidad_id;
+    return dto;
+  }
+
+  static toDtoDatosPersonales(entity: Persona): ShowPersonaDatosPersonalesDto {
+    const dto = new ShowPersonaDatosPersonalesDto();
+    dto.id = entity.id;
     dto.nombre = entity.nombre;
     dto.apellido1 = entity.apellido1;
     dto.apellido2 = entity.apellido2;

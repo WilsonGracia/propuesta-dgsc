@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { Usuario } from '../entities/usuario.entity';
+import { Persona } from 'src/datos-personales/entities/persona.entity';
+import { PersonaMapper } from 'src/datos-personales/mappers/persona.mapper';
 
 @Injectable()
 export class UsuarioRepository {

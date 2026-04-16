@@ -21,6 +21,8 @@ import { Distrito } from './entities/distrito.entity';
 import { ShowCantonDto } from './dtos/outputs/show-canton.dto';
 import { CantonMapper } from './mappers/canton.mapper';
 import { Canton } from './entities/canton.entity';
+import { ShowPersonaDatosPersonalesDto } from './dtos/outputs/show-persona-datos.personales.dto';
+import { Persona } from './entities/persona.entity';
 
 @Injectable()
 export class DatosPersonalesService {
@@ -102,5 +104,48 @@ export class DatosPersonalesService {
     }
   }
 
+  async obtenerUbicacionDIdS(id: string) {
+    const result = await this.ubicacionRepository.obtenerUbicacionDId(id);
+
+    if (!result.length) return null;
+
+    const row = result[0];
+
+    const provincia = {
+      id: row.p_id_provincia,
+      nombre: row.p_nombre_provincia,
+    } as Provincia;
+
+    const canton = {
+      id: row.p_id_canton,
+      nombre: row.p_nombre_canton,
+      provincia_id: row.p_id_provincia,
+    } as Canton;
+
+    const distrito = {
+      id: Number(id),
+      nombre: row.p_nombre_distrito,
+      canton_id: row.p_id_canton,
+    } as unknown as Distrito;
+
+    return {
+      provincia: ProvinciaMapper.toDto(provincia),
+      canton: CantonMapper.toDto(canton),
+      distrito: DistritoMapper.toDto(distrito),
+    };
+  }
+
   //! FUNCIONES PARA TRAER LAS PROVINCIAS, CANTONES Y DISTRITOS
+
+  async muestraDatosPersonalesUIdS(
+    id: string,
+  ): Promise<ShowPersonaDatosPersonalesDto> {
+    try {
+      const result =
+        await this.personaRepository.muestraDatosPersonalesUIdR(id);
+      return PersonaMapper.toDtoDatosPersonales(result[0] as Persona);
+    } catch (error) {
+      handleDbError(error);
+    }
+  }
 }
