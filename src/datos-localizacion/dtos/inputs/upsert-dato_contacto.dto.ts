@@ -5,7 +5,6 @@ import {
   IsString,
   Length,
   Matches,
-  IsUUID,
   IsEmail,
   Validate,
   ValidatorConstraint,
@@ -17,16 +16,13 @@ import {
 class NumerosDiferentesConstraint implements ValidatorConstraintInterface {
   validate(_: any, args: ValidationArguments) {
     const o = args.object as any;
-
     if (o.numero_opcional && o.numero_opcional === o.numero_principal)
       return false;
     if (o.numero_ext && o.numero_ext === o.numero_principal) return false;
     if (o.numero_opcional && o.numero_ext && o.numero_opcional === o.numero_ext)
       return false;
-
     return true;
   }
-
   defaultMessage() {
     return 'El número principal, opcional y extensión no pueden ser iguales entre sí';
   }
@@ -98,10 +94,6 @@ export class UpsertDatoContactoDto {
   @IsInt({ message: 'El distrito debe ser un número entero' })
   @IsNotEmpty({ message: 'El distrito es obligatorio' })
   distrito_id!: number;
-
-  @IsUUID('4', { message: 'El id de la persona debe ser un UUID válido' })
-  @IsNotEmpty({ message: 'El id de la persona es obligatorio' })
-  persona_id!: string;
 
   @Validate(NumerosDiferentesConstraint)
   private readonly _numerosValidacion!: boolean;

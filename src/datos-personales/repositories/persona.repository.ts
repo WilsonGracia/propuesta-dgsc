@@ -56,4 +56,12 @@ export class PersonaRepository {
 
     return response;
   }
+
+  async obtenerPersonaIdUId(id: string): Promise<any> {
+    const result = await this.dataSource.query(
+      `SELECT * FROM obtener_PersonaId_IdU($1)`,
+      [id],
+    );
+    return result[0];
+  }
 }
