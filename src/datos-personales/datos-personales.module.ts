@@ -17,5 +17,6 @@ import { UbicacionRepository } from './repositories/ubicacion.repository';
     GeneroRepository,
     UbicacionRepository,
   ],
+  exports: [DatosPersonalesService],
 })
 export class DatosPersonalesModule {}

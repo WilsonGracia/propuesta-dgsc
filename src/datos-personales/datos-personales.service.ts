@@ -148,4 +148,13 @@ export class DatosPersonalesService {
       handleDbError(error);
     }
   }
+
+  async obtenerPersonaIdPorUsuarioId(id: string): Promise<string> {
+    try {
+      const respuesta = await this.personaRepository.obtenerPersonaIdUId(id);
+      return respuesta?.id ?? null;
+    } catch (error) {
+      handleDbError(error);
+    }
+  }
 }

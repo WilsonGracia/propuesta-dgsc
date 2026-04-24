@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Query,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
+import type { Request } from 'express';
 import { DatosPersonalesService } from './datos-personales.service';
 import { CreatePersonaDto } from './dtos/inputs/create-persona.dto';
 import { UpsertPersonaDto } from './dtos/inputs/upsert-persona.dto';
@@ -8,6 +17,7 @@ import { ShowDistritoDto } from './dtos/outputs/show-distrito.dto';
 import { ShowCantonDto } from './dtos/outputs/show-canton.dto';
 import { ShowPersonaDatosPersonalesDto } from './dtos/outputs/show-persona-datos.personales.dto';
 import { ShowProvinciaDto } from './dtos/outputs/show-provincia.dto';
+import { JwtAuthGuard } from '../login/guards/jwt-auth.guard';
 
 @Controller('datos-personales')
 export class DatosPersonalesController {
@@ -18,11 +28,13 @@ export class DatosPersonalesController {
     return this.dpService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('insertar')
   async insertar(@Body() dto: CreatePersonaDto): Promise<void> {
     await this.dpService.insertar(dto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('upsert')
   async upserPersonaC(@Body() dto: UpsertPersonaDto): Promise<void> {
     await this.dpService.upsertPersonaS(dto);
@@ -53,19 +65,23 @@ export class DatosPersonalesController {
     return await this.dpService.obtenerDistritosS(c_id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/obtenerDatosPersonales')
   async muestraDatosPersonalesUIdC(
-    @Body('id') id: string,
+    @Req() req: Request,
   ): Promise<ShowPersonaDatosPersonalesDto> {
+    const id = (req.user as { id: string }).id;
     return await this.dpService.muestraDatosPersonalesUIdS(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/ubicacion')
-  async obtenerUbicacionDIdC(@Body('id') id: string): Promise<{
+  async obtenerUbicacionDIdC(@Req() req: Request): Promise<{
     provincia: ShowProvinciaDto;
     canton: ShowCantonDto;
     distrito: ShowDistritoDto;
   } | null> {
+    const id = (req.user as { id: string }).id;
     return this.dpService.obtenerUbicacionDIdS(id);
   }
 }

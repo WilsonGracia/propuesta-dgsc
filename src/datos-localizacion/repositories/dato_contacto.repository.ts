@@ -6,13 +6,12 @@ import { UpsertDatoContactoDto } from '../dtos/inputs/upsert-dato_contacto.dto';
 export class DatoContactoRepository {
   constructor(private readonly dataSource: DataSource) {}
 
-  async upsertDatoContactoR(dto: UpsertDatoContactoDto): Promise<void> {
+  async upsertDatoContactoR(
+    personaId: string,
+    dto: UpsertDatoContactoDto,
+  ): Promise<void> {
     await this.dataSource.query(
-      `
-      CALL sp_actualiza_dato_contacto_por_persona_id(
-        $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11
-      );
-      `,
+      `CALL sp_actualiza_dato_contacto_por_persona_id($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11)`,
       [
         dto.apartado_postal,
         dto.direccion,
@@ -24,8 +23,22 @@ export class DatoContactoRepository {
         dto.correo_principal,
         dto.correo_opcional ?? null,
         dto.distrito_id,
-        dto.persona_id,
+        personaId,
       ],
     );
+  }
+
+  async obtenerDatoContactoPorPersonaIdR(personaId: string) {
+    const result = await this.dataSource.query(
+      `
+    SELECT * 
+    FROM fn_mostrar_datos_contacto_pId($1::UUID);
+    `,
+      [personaId],
+    );
+
+    console.log('holaaaa');
+
+    return result[0] ?? null;
   }
 }
