@@ -8,6 +8,8 @@ import { Genero } from './datos-personales/entities/genero.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { LoginModule } from './login/login.module';
 import { DatosLocalizacionModule } from './datos-localizacion/datos-localizacion.module';
+import { EstudiosRealizadosModule } from './estudios-realizados/estudios-realizados.module';
+import { ExperienciaLaboralModule } from './experiencia-laboral/experiencia-laboral.module';
 
 @Module({
   imports: [
@@ -31,6 +33,8 @@ import { DatosLocalizacionModule } from './datos-localizacion/datos-localizacion
     ConfigModule,
     LoginModule,
     DatosLocalizacionModule,
+    EstudiosRealizadosModule,
+    ExperienciaLaboralModule,
   ],
   controllers: [AppController],
   providers: [AppService],

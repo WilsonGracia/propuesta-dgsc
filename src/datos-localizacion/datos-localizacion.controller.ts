@@ -11,7 +11,6 @@ import { DatosLocalizacionService } from './datos-localizacion.service';
 import { UpsertDatoContactoDto } from './dtos/inputs/upsert-dato_contacto.dto';
 import { ShowDatoContactoDto } from './dtos/outputs/show-dato_contacto.dto';
 import { JwtAuthGuard } from '../login/guards/jwt-auth.guard';
-import { DatosPersonalesService } from 'src/datos-personales/datos-personales.service';
 
 @Controller('datos-localizacion')
 export class DatosLocalizacionController {
